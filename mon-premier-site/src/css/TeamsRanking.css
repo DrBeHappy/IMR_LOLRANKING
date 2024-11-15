@@ -1,0 +1,20 @@
+/* Style de la liste */
+.droppable-area {
+  margin: 10px;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
+
+/* Style pour chaque élément draggable */
+.draggable-item {
+  padding: 10px;
+  background-color: #ddd;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: move;
+}
+
+.draggable-item:active {
+  background-color: lightgreen;
+}

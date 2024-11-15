@@ -1,0 +1,294 @@
+{
+  "teams": [
+    {
+      "id": 1,
+      "name": "Karmine Corp",
+      "tag": "KC",
+      "logo": "KC.png",
+      "color": "#3c78d8",
+      "players": [
+        {
+          "name": "Canna",
+          "role": "Top"
+        },
+        {
+          "name": "Yike",
+          "role": "Jng"
+        },
+        {
+          "name": "Vladi",
+          "role": "Mid"
+        },
+        {
+          "name": "Calise",
+          "role": "Adc"
+        },
+        {
+          "name": "Targamas",
+          "role": "Sup"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Fnatic",
+      "tag": "FNC",
+      "logo": "FNC.png",
+      "color": "#ff9900",
+      "players": [
+        {
+          "name": "Oscarinin",
+          "role": "Top"
+        },
+        {
+          "name": "Razork",
+          "role": "Jng"
+        },
+        {
+          "name": "Humanoid",
+          "role": "Mid"
+        },
+        {
+          "name": "Upset",
+          "role": "Adc"
+        },
+        {
+          "name": "Mikyx",
+          "role": "Sup"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "G2 ESPORTS",
+      "tag": "G2",
+      "logo": "G2.png",
+      "color": "#505050",
+      "players": [
+        {
+          "name": "BrokenBlade",
+          "role": "Top"
+        },
+        {
+          "name": "Skewmonde",
+          "role": "Jng"
+        },
+        {
+          "name": "Caps",
+          "role": "Mid"
+        },
+        {
+          "name": "Hans Sama",
+          "role": "Adc"
+        },
+        {
+          "name": "Labrov",
+          "role": "Sup"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "GIANTX",
+      "tag": "GX",
+      "logo": "GX.png",
+      "color": "#ffbb77",
+      "players": [
+        {
+          "name": "Lot",
+          "role": "Top"
+        },
+        {
+          "name": "Closer",
+          "role": "Jng"
+        },
+        {
+          "name": "Jackies",
+          "role": "Mid"
+        },
+        {
+          "name": "Noah",
+          "role": "Adc"
+        },
+        {
+          "name": "Jun",
+          "role": "Sup"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "KOI",
+      "tag": "KOI",
+      "logo": "KOI.png",
+      "color": "#9827e3",
+      "players": [
+        {
+          "name": "Myrwn",
+          "role": "Top"
+        },
+        {
+          "name": "Elyoya",
+          "role": "Jng"
+        },
+        {
+          "name": "Jojopyun",
+          "role": "Mid"
+        },
+        {
+          "name": "Supa",
+          "role": "Adc"
+        },
+        {
+          "name": "Alvaro",
+          "role": "Sup"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Rogue",
+      "tag": "RGE",
+      "logo": "RGE.png",
+      "color": "#01437c",
+      "players": [
+        {
+          "name": "???",
+          "role": "Top"
+        },
+        {
+          "name": "???",
+          "role": "Jng"
+        },
+        {
+          "name": "Larsen",
+          "role": "Mid"
+        },
+        {
+          "name": "???",
+          "role": "Adc"
+        },
+        {
+          "name": "???",
+          "role": "Sup"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "SK GAMING",
+      "tag": "SK",
+      "logo": "SK.png",
+      "color": "#741b47",
+      "players": [
+        {
+          "name": "JNX",
+          "role": "Top"
+        },
+        {
+          "name": "Isma",
+          "role": "Jng"
+        },
+        {
+          "name": "Reeker",
+          "role": "Mid"
+        },
+        {
+          "name": "Rahel",
+          "role": "Adc"
+        },
+        {
+          "name": "Loopy",
+          "role": "Sup"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "TEAM BDS",
+      "tag": "BDS",
+      "logo": "BDS.png",
+      "color": "#ffc0df",
+      "players": [
+        {
+          "name": "Irrelevant",
+          "role": "Top"
+        },
+        {
+          "name": "113",
+          "role": "Jng"
+        },
+        {
+          "name": "nuc",
+          "role": "Mid"
+        },
+        {
+          "name": "Ice",
+          "role": "Adc"
+        },
+        {
+          "name": "Parus",
+          "role": "Sup"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "HERETICS",
+      "tag": "HRTS",
+      "logo": "HRTS.png",
+      "color": "#ffa825",
+      "players": [
+        {
+          "name": "Carlsen",
+          "role": "Top"
+        },
+        {
+          "name": "Sheo",
+          "role": "Jng"
+        },
+        {
+          "name": "Kamiloo",
+          "role": "Mid"
+        },
+        {
+          "name": "Flakked",
+          "role": "Adc"
+        },
+        {
+          "name": "Stend",
+          "role": "Sup"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "VITALITY",
+      "tag": "VIT",
+      "logo": "VIT.png",
+      "color": "#ffff00",
+      "players": [
+        {
+          "name": "Naak Nako",
+          "role": "Top"
+        },
+        {
+          "name": "Lyncas",
+          "role": "Jng"
+        },
+        {
+          "name": "Czajek",
+          "role": "Mid"
+        },
+        {
+          "name": "Carzzy",
+          "role": "Adc"
+        },
+        {
+          "name": "Kylissang",
+          "role": "Sup"
+        }
+      ]
+    }
+  ]
+}

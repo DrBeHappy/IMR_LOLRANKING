@@ -1,0 +1,126 @@
+.team-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    padding: 0 10px;
+  }
+  
+  .team-card {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-width: 300px;
+    max-width: 100%;
+    color: #000;
+  }
+  
+  /* Container du header */
+  .team-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px; /* Ajuste cette hauteur selon tes besoins */
+  position: relative;
+  }
+  
+  .team-name {
+    color: #000;
+    font-weight: bold;
+  }
+  
+  .team-logo {
+    margin-right: 10px;
+  }
+
+  
+  .team-table {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    table-layout: fixed; /* Force toutes les colonnes à avoir la même largeur */
+    width: 100%; /* S'assure que la table occupe toute la largeur disponible */
+    border: 1px solid #000; /* Applique une bordure sur tous les éléments de table */
+  }
+  
+  .team-header-cell {
+    border: 1px solid #000;
+  }
+  
+  .team-tr{
+    border: 1px solid #000;
+  }
+  .team-player-cell {
+    border: 1px solid #000;
+  }
+  
+  .team-role-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+  }
+  
+  .team-role-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .role-logo {
+    margin-right: 10px;
+  }
+  
+  .team-separator {
+    border-left: 2px solid #000;
+    margin: 0 10px;
+    height: 20px;
+  }
+  
+/* Style pour le select */
+  .team-header select {
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #888;
+    height: 100%;
+    width: 80px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    /* Centrer le texte horizontalement et verticalement */
+    text-align: center;
+    text-align-last: center;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease; /* Transition pour un changement fluide */
+  }
+
+  .team-player-rating-cell select {
+    width: 70%;  /* Le select prend toute la largeur de la cellule */
+    height: 100%; /* Le select prend toute la hauteur de la cellule */
+    border-radius: 20px;
+    font-size: 16px; 
+    text-align: center;
+    text-align-last: center;
+    padding: inherit;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease; /* Transition pour un changement fluide */
+    
+  }
+
+  /* Spécifier la largeur de la colonne "Notes" */
+.team-table th:nth-child(3), .team-table td:nth-child(3) {
+  width: 100px; /* Largeur spécifique pour la colonne des notes */
+}
+  
+
+
