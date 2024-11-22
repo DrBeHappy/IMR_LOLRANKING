@@ -1,0 +1,21 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "username": "JohnDoe",
+        "passwordHash": "$2b$10$examplehashedpassword1234567890",
+        "email": "johndoe@example.com",
+        "role": "user",
+        "lastLogin": "2024-11-15T10:15:00Z"
+      },
+      {
+        "id": 2,
+        "username": "Admin01",
+        "passwordHash": "$2b$10$examplehashedpassword0987654321",
+        "email": "admin01@example.com",
+        "role": "admin",
+        "lastLogin": null
+      }
+    ]
+  }
+  

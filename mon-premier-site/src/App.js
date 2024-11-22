@@ -4,6 +4,8 @@ import Home from './components/Home';
 import Teams from './components/Teams';
 import TeamsRating from './components/TeamsRating';
 import TeamsRanking from './components/TeamsRanking';  // Importer TeamsRanking ici
+import Dashboard from './components/Dashboard';
+import LoginPage from './components/LoginPage';
 import './css/App.css';
 
 function App() {
@@ -16,7 +18,9 @@ function App() {
           </nav>
         </header>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/dede" element={<Home />} />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/notes" element={<TeamsRating />} />
           <Route path="/rank" element={<TeamsRanking />} />  {/* Route pour TeamsRanking */}

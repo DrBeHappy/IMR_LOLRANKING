@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
-// Fonction pour générer des éléments avec des ids uniques
-const getItems = (count) =>
-  Array.from({ length: count }, (v, k) => k).map((k) => ({
-    id: `item-${k}`,
-    content: `Item ${k}`,
-  }));
+import { DragDropContext, Draggable } from "react-beautiful-dnd";
+import { StrictModeDroppable as Droppable } from "../helpers/StrictModeDroppable";
+import teamsData from "../data/teams.json"; // Importer les données JSON
+import "../css/TeamsRanking.css"; // Importer le fichier CSS
 
 // Fonction pour réorganiser les éléments dans l'état
 const reorder = (list, startIndex, endIndex) => {
@@ -18,12 +14,12 @@ const reorder = (list, startIndex, endIndex) => {
 
 const grid = 8;
 
-// Styles de l'élément lors du drag
-const getItemStyle = (isDragging, draggableStyle) => ({
+// Fonction pour récupérer la couleur de l'équipe
+const getItemStyle = (isDragging, draggableStyle, color) => ({
   userSelect: "none",
   padding: grid * 2,
   margin: `0 0 ${grid}px 0`,
-  background: isDragging ? "lightgreen" : "grey",
+  background: isDragging ? "lightgreen" : color, // Utiliser la couleur de l'équipe ici
   ...draggableStyle,
 });
 
@@ -31,21 +27,24 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 const getListStyle = (isDraggingOver) => ({
   background: isDraggingOver ? "lightblue" : "lightgrey",
   padding: grid,
-  width: 250,
+  width: "100%", // S'assurer que la liste occupe toute la largeur de la zone Droppable
 });
 
 class TeamsRanking extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // Initialisation avec un seul item (vous pouvez augmenter ce nombre pour tester)
-      items: getItems(10), // Remplacez 10 par le nombre d'éléments que vous souhaitez
+      items: teamsData.teams.map((team) => ({
+        id: team.id,
+        name: team.name,
+        logo: team.logo,
+        color: team.color, // Ajoutez la couleur pour chaque équipe
+      })),
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
   onDragEnd(result) {
-    // Si l'élément est lâché en dehors de la zone
     if (!result.destination) {
       return;
     }
@@ -61,38 +60,89 @@ class TeamsRanking extends Component {
     });
   }
 
+  saveRanking() {
+    // Préparer les données pour sauvegarde
+    const updatedData = { ...teamsData, ranking: this.state.items };
+
+    // Sauvegarder dans le fichier JSON via une API ou localStorage
+    localStorage.setItem("teamRanking", JSON.stringify(updatedData));
+
+    alert("Classement sauvegardé !");
+  }
+
+  componentDidMount() {
+    // Charger le classement depuis localStorage si disponible
+    const savedRanking = localStorage.getItem("teamRanking");
+    if (savedRanking) {
+      const parsedRanking = JSON.parse(savedRanking);
+      this.setState({
+        items: parsedRanking.ranking,
+      });
+    }
+  }
+  
   render() {
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={getListStyle(snapshot.isDraggingOver)}
-            >
-              {this.state.items.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style
-                      )}
-                    >
-                      {item.content}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <div className="team-table-container">
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <Droppable droppableId="droppable">
+            {(provided, snapshot) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="team-ranking-table"
+                style={getListStyle(snapshot.isDraggingOver)}
+              >
+                <div className="team-table-header">
+                  <div className="team-table-column">Position</div>
+                  <div className="team-table-column">Team</div>
+                </div>
+                {this.state.items.map((item, index) => (
+                  <Draggable
+                    key={item.id}
+                    draggableId={item.id.toString()}
+                    index={index}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                        className="team-table-row"
+                        style={{
+                          ...getItemStyle(
+                            snapshot.isDragging,
+                            provided.draggableProps.style,
+                            item.color // Passez la couleur dynamique de chaque équipe
+                          ),
+                        }}
+                      >
+                        <div className="team-table-column">
+                          {/* Affiche la position (index + 1) */}
+                          {index + 1}
+                        </div>
+                        <div className="team-table-column">
+                          {/* Affiche le logo et le nom de l'équipe */}
+                          <img
+                            src={`/logos/${item.logo}`} // Le chemin des logos dans le dossier public
+                            alt={item.name}
+                            className="team-logo"
+                          />
+                          <span className="team-name">{item.name}</span>
+                        </div>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+                <button onClick={this.saveRanking} className="save-button">
+                  Valider
+                </button>
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </div>
     );
   }
 }
