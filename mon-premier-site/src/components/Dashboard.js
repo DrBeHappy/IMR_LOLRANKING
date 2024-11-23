@@ -1,33 +1,58 @@
 import React, { useEffect, useState } from 'react';
 
 const DashboardPage = () => {
-    const [teams, setTeams] = useState([]);
+    const [message, setMessage] = useState('');
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const fetchTeams = async () => {
-            const response = await fetch('http://localhost:3000/teams', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-            const data = await response.json();
-            setTeams(data.teams);
-        };
+        const fetchDashboard = async () => {
+            const token = localStorage.getItem('token'); // Récupère le token depuis le localStorage
+            if (!token) {
+                setMessage('Token non disponible. Veuillez vous connecter.');
+                return;
+            }
 
-        fetchTeams();
-    }, []);
+            try {
+                const response = await fetch('http://localhost:3000/dashboard', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Ajoute le token dans l'en-tête
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                  }
+
+
+                const data = await response.json();
+                if (data.success) {
+                    console.log("Données du dashboard récupérées :", data);
+                    setMessage(data.message);
+                    setUser(data.user); // Stocke les infos utilisateur si nécessaires
+                } else {
+                    console.log("Données du dashboard récupérées dans else :", data);
+                    setMessage(data.message);
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération du dashboard:", error);
+                setMessage('Erreur lors de la récupération du dashboard:');
+            }
+        };
+        fetchDashboard();
+    }, []); // Appelé une fois au montage du composant
 
     return (
         <div>
-            <h2>Tableau de bord</h2>
-            <ul>
-                {teams.map((team, index) => (
-                    <li key={index}>
-                        {team.name} - {team.tag} - {team.color}
-                    </li>
-                ))}
-            </ul>
+            <h1>Tableau de bord</h1>
+            <p>{message}</p>
+            {user && (
+                <div>
+                    <p>Nom d'utilisateur : {user.username}</p>
+                    <p>ID utilisateur : {user.userId}</p>
+                </div>
+            )}
         </div>
     );
 };

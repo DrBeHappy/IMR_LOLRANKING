@@ -1,21 +1,29 @@
 {
-    "users": [
-      {
-        "id": 1,
-        "username": "JohnDoe",
-        "passwordHash": "$2b$10$examplehashedpassword1234567890",
-        "email": "johndoe@example.com",
-        "role": "user",
-        "lastLogin": "2024-11-15T10:15:00Z"
-      },
-      {
-        "id": 2,
-        "username": "Admin01",
-        "passwordHash": "$2b$10$examplehashedpassword0987654321",
-        "email": "admin01@example.com",
-        "role": "admin",
-        "lastLogin": null
-      }
-    ]
-  }
-  
+  "users": [
+    {
+      "id": 1,
+      "username": "DBH",
+      "passwordHash": "$2b$10$2yF.hB.FJj.YIsmxxSt7lOYCOqNy2hgVMX0Q92iQamlnIvzEajchC"
+    },
+    {
+      "id": 2,
+      "username": "Tchwo",
+      "passwordHash": "$2b$10$okObl.rUdsn8SX462Pg4/OI6BvydHKCNbExVrnDpgi92Xm.scTiE6"
+    },
+    {
+      "id": 3,
+      "username": "Thiblethib",
+      "passwordHash": "$2b$10$x7QKSRADveoyv5AB/nd1N.LBssEIDiRSOL8JMG6OiLy.YgaPaIuIe"
+    },
+    {
+      "id": 4,
+      "username": "Zaigda",
+      "passwordHash": "$2b$10$qW1TkaV5WRKuLenffu6OTe9qfv/9.B9.0Ccq.ZydyYA.umnoGcT8e"
+    },
+    {
+      "id": 5,
+      "username": "Thiblethib2",
+      "passwordHash": "$2b$10$x7QKSRADveoyv5AB/nd1N.LBssEIDiRSOL8JMG6OiLy.YgaPaIuIe"
+    }
+  ]
+}
