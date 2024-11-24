@@ -84,3 +84,34 @@
 .save-button:hover {
   background-color: #0056b3;
 }
+
+/* Sélecteur de ligue */
+.league-selector {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* Espace entre les boutons */
+  margin-bottom: 20px;
+}
+
+.league-selector button {
+  flex: 1; /* Les boutons prennent toute la largeur disponible */
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #4CAF50; /* Couleur de fond verte */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.league-selector button:hover {
+  background-color: #45a049; /* Changer la couleur au survol */
+  transform: scale(1.05); /* Effet de zoom léger */
+}
+
+.league-selector button:focus {
+  background-color: #3e0a81; /* Changer la couleur au survol */
+}
+

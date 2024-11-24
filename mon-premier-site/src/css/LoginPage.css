@@ -1,0 +1,11 @@
+
+
+.login_form_team {
+    border: 2px solid aqua;
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère autour du formulaire */
+    padding: 20px; /* Espacement interne */
+    width: 500px; /* Largeur fixe du formulaire */
+    max-width: 100%; /* Ne pas dépasser la largeur de l'écran */
+    align-self: center;
+  }

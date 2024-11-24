@@ -101,8 +101,6 @@ function verifyToken(req, res, next) {
     }
 }
 
-
-
 // Route protégée (Dashboard)
 app.get("/dashboard", verifyToken, (req, res) => {
   console.log("Requête reçue sur /dashboard");

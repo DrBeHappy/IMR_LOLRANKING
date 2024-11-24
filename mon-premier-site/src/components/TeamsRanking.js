@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { DragDropContext, Draggable } from "react-beautiful-dnd";
 import { StrictModeDroppable as Droppable } from "../helpers/StrictModeDroppable";
-import teamsData from "../data/teams.json"; // Importer les données JSON
+import teamsData from "../data/testdb.json"; // Importer les données JSON
 import "../css/TeamsRanking.css"; // Importer le fichier CSS
 
 // Fonction pour réorganiser les éléments dans l'état
@@ -34,7 +34,8 @@ class TeamsRanking extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: teamsData.teams.map((team) => ({
+      selectedLeague: "LEC", // Par défaut, afficher LEC
+      items: teamsData.leagues["LEC"].teams.map((team) => ({
         id: team.id,
         name: team.name,
         logo: team.logo,
@@ -80,7 +81,21 @@ class TeamsRanking extends Component {
       });
     }
   }
-  
+
+  // Fonction pour changer la ligue sélectionnée
+  changeLeague(league) {
+    const teams = teamsData.leagues[league].teams.map((team) => ({
+      id: team.id,
+      name: team.name,
+      logo: team.logo,
+      color: team.color,
+    }));
+    this.setState({
+      selectedLeague: league,
+      items: teams,
+    });
+  }
+
   render() {
     return (
       <div className="team-table-container">
@@ -93,6 +108,10 @@ class TeamsRanking extends Component {
                 className="team-ranking-table"
                 style={getListStyle(snapshot.isDraggingOver)}
               >
+                <div className="league-selector">
+                  <button onClick={() => this.changeLeague("LEC")}>LEC</button>
+                  <button onClick={() => this.changeLeague("LFL")}>LFL</button>
+                </div>
                 <div className="team-table-header">
                   <div className="team-table-column">Position</div>
                   <div className="team-table-column">Team</div>

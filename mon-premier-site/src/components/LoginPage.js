@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import '../css/LoginPage.css';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -22,7 +25,8 @@ const LoginPage = () => {
             const data = await response.json();
             if (data.success) {
                 localStorage.setItem('token', data.token); // Stocke le token
-                navigate('/dashboard'); // Redirige vers le tableau de bord
+                navigate('/teams'); // Redirige vers le tableau de bord
+                window.location.reload(); // Recharger la page pour afficher les changements
             } else {
                 setError(data.message);
             }
@@ -33,27 +37,19 @@ const LoginPage = () => {
     };
 
     return (
-        <div>
+        <div className='login_form_team'>
             <h1>Connexion</h1>
             <form onSubmit={handleLogin}>
-                <div>
-                    <label>Nom d'utilisateur</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Mot de passe</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter User" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                </Form.Group>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit">Connexion</button>
+                <Button variant="primary" type="submit">Connexion</Button>
             </form>
         </div>
     );

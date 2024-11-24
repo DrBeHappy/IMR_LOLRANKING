@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import data from '../data/teamslfl.json';
+import data from '../data/testdb.json';
 import '../css/Teams.css'; // Import du CSS
 
 function Teams() {
+  // État pour la ligue sélectionnée (LEC ou LFL)
+  const [league, setLeague] = useState('LEC'); 
   const [teams, setTeams] = useState([]);
 
+  // Effet pour mettre à jour les équipes en fonction de la ligue sélectionnée
   useEffect(() => {
-    setTeams(data.teams);
-  }, []);
+    // On met à jour les équipes en fonction de la ligue sélectionnée
+    setTeams(data.leagues[league].teams);
+  }, [league]); // L'effet se déclenche chaque fois que 'league' change
+
+  // Fonction pour changer la ligue
+  const toggleLeague = () => {
+    setLeague(league === 'LEC' ? 'LFL' : 'LEC');
+  };
 
   return (
     <div>
-      <h2>Liste des équipes</h2>
+      <h2>Liste des équipes - {league}</h2>
+      <button onClick={toggleLeague} className="league-toggle-button">
+        {league === 'LEC' ? 'Passer à LFL' : 'Passer à LEC'}
+      </button>
+
       <div className="team-container">
         {teams.length > 0 ? (
           teams.map((team) => (
@@ -74,9 +87,4 @@ function Teams() {
   );
 };
 
-
 export default Teams;
-
-
-
-
