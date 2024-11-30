@@ -28,6 +28,19 @@ const getUsers = () => {
   }
 };
 
+const userRankingPath = path.join(__dirname, 'data', 'userRanking.json');
+
+// Lecture du fichier JSON
+fs.readFile(userRankingPath, 'utf8', (err, data) => {
+  if (err) {
+    console.error('Erreur de lecture du fichier:', err);
+    return;
+  }
+  const rankings = JSON.parse(data);
+  console.log(rankings);
+});
+
+
 app.post('/register', async (req, res) => {
     
     const { username, password } = req.body;
@@ -112,6 +125,26 @@ app.get("/dashboard", verifyToken, (req, res) => {
   });
 });
 
+// Endpoint pour lire les rankings
+app.get('public/data/userRanking', (req, res) => {
+  const filePath = path.join(__dirname, 'public/data/userRanking.json');
+  if (fs.existsSync(filePath)) {
+    const data = fs.readFileSync(filePath);
+    res.json(JSON.parse(data));
+  } else {
+    res.json([]);
+  }
+});
+
+// Endpoint pour sauvegarder les rankings
+app.put('public/data/userRanking', (req, res) => {
+  const filePath = path.join(__dirname, 'public/data/userRanking.json');
+  fs.writeFileSync(filePath, JSON.stringify(req.body, null, 2));
+  res.send({ message: 'Classement sauvegardé !' });
+});
+
+
+
 // Déclare toutes les routes API ici
 //app.use("/api", apiRouter); // Exemple : routes API
 
@@ -122,11 +155,11 @@ app.use(express.static(path.join(__dirname, "build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
-  
-// Démarrage du serveur
+
+
 app.listen(PORT, () => {
-    console.log(`Serveur démarré sur http://localhost:${PORT}`);
-  });
+  console.log(`Server running on http://localhost:${PORT}`);
+});
 
 
 

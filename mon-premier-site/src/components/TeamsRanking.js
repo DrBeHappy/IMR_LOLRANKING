@@ -34,21 +34,103 @@ class TeamsRanking extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedLeague: "LEC", // Par défaut, afficher LEC
-      items: teamsData.leagues["LEC"].teams.map((team) => ({
-        id: team.id,
-        name: team.name,
-        logo: team.logo,
-        color: team.color, // Ajoutez la couleur pour chaque équipe
-      })),
+      selectedLeague: "LEC", // Ligue sélectionnée
+      items: [], // Classement des équipes pour la ligue sélectionnée
     };
     this.onDragEnd = this.onDragEnd.bind(this);
+    this.saveRanking = this.saveRanking.bind(this);
+    this.loadRanking = this.loadRanking.bind(this);
   }
 
-  onDragEnd(result) {
-    if (!result.destination) {
-      return;
+  // Fonction pour récupérer l'ID de l'utilisateur connecté
+  getCurrentUserId() {
+    // Vérifie si l'utilisateur est stocké dans localStorage
+    let userId = localStorage.getItem('userId');
+    if (!userId) {
+      localStorage.setItem('userId', userId); // Enregistrer dans localStorage pour les prochaines visites
     }
+    return userId;
+  }
+
+   // Charger le classement depuis userRanking.json ou testdb.json
+   async loadRanking() {
+    const userId = this.getCurrentUserId();
+    let userRankings;
+
+    try {
+      const response = await fetch("/data/userRanking.json");
+      userRankings = await response.json();
+    } catch (error) {
+      console.error("Erreur lors du chargement des rankings :", error);
+      userRankings = [];
+    }
+
+    // Trouver le classement de l'utilisateur pour la ligue sélectionnée
+    const userRanking = userRankings.find(
+      (ranking) =>
+        ranking.userId === userId &&
+        ranking.rankings[this.state.selectedLeague]
+    );
+
+    if (userRanking) {
+      this.setState({
+        items: userRanking.rankings[this.state.selectedLeague],
+      });
+    } else {
+      // Charger les données par défaut si aucun classement n'existe
+      const teams = teamsData.leagues[this.state.selectedLeague]?.teams || [];
+      this.setState({
+        items: teams.map((team) => ({
+          id: team.id,
+          name: team.name,
+          logo: team.logo,
+          color: team.color,
+        })),
+      });
+    }
+  }
+
+  // Sauvegarder le classement dans userRanking.json
+  async saveRanking() {
+    const userId = this.getCurrentUserId();
+    let userRankings;
+
+    try {
+      const response = await fetch("/data/userRanking.json");
+      userRankings = await response.json();
+    } catch (error) {
+      console.error("Erreur lors du chargement des rankings :", error);
+      userRankings = [];
+    }
+
+    const existingUser = userRankings.find((ranking) => ranking.userId === userId);
+
+    if (existingUser) {
+      existingUser.rankings[this.state.selectedLeague] = this.state.items;
+    } else {
+      userRankings.push({
+        userId: userId,
+        rankings: {
+          [this.state.selectedLeague]: this.state.items,
+        },
+      });
+    }
+
+    try {
+      await fetch("/data/userRanking.json", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userRankings),
+      });
+      alert("Classement sauvegardé !");
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde :", error);
+    }
+  }
+
+
+  onDragEnd(result) {
+    if (!result.destination) return;
 
     const items = reorder(
       this.state.items,
@@ -56,44 +138,17 @@ class TeamsRanking extends Component {
       result.destination.index
     );
 
-    this.setState({
-      items,
-    });
+    this.setState({ items });
   }
 
-  saveRanking() {
-    // Préparer les données pour sauvegarde
-    const updatedData = { ...teamsData, ranking: this.state.items };
-
-    // Sauvegarder dans le fichier JSON via une API ou localStorage
-    localStorage.setItem("teamRanking", JSON.stringify(updatedData));
-
-    alert("Classement sauvegardé !");
+  async componentDidMount() {
+    await this.loadRanking();
   }
-
-  componentDidMount() {
-    // Charger le classement depuis localStorage si disponible
-    const savedRanking = localStorage.getItem("teamRanking");
-    if (savedRanking) {
-      const parsedRanking = JSON.parse(savedRanking);
-      this.setState({
-        items: parsedRanking.ranking,
-      });
-    }
-  }
+  
 
   // Fonction pour changer la ligue sélectionnée
   changeLeague(league) {
-    const teams = teamsData.leagues[league].teams.map((team) => ({
-      id: team.id,
-      name: team.name,
-      logo: team.logo,
-      color: team.color,
-    }));
-    this.setState({
-      selectedLeague: league,
-      items: teams,
-    });
+    this.setState({ selectedLeague: league }, () => this.loadRanking());
   }
 
   render() {
