@@ -28,18 +28,6 @@ const getUsers = () => {
   }
 };
 
-const userRankingPath = path.join(__dirname, 'data', 'userRanking.json');
-
-// Lecture du fichier JSON
-fs.readFile(userRankingPath, 'utf8', (err, data) => {
-  if (err) {
-    console.error('Erreur de lecture du fichier:', err);
-    return;
-  }
-  const rankings = JSON.parse(data);
-  console.log(rankings);
-});
-
 
 app.post('/register', async (req, res) => {
     
@@ -114,6 +102,8 @@ function verifyToken(req, res, next) {
     }
 }
 
+
+
 // Route protégée (Dashboard)
 app.get("/dashboard", verifyToken, (req, res) => {
   console.log("Requête reçue sur /dashboard");
@@ -125,28 +115,52 @@ app.get("/dashboard", verifyToken, (req, res) => {
   });
 });
 
+
+const userRankingPath = path.join(__dirname, 'public', 'userRanking.json');
+
+
 // Endpoint pour lire les rankings
-app.get('public/data/userRanking', (req, res) => {
-  const filePath = path.join(__dirname, 'public/data/userRanking.json');
-  if (fs.existsSync(filePath)) {
-    const data = fs.readFileSync(filePath);
-    res.json(JSON.parse(data));
-  } else {
-    res.json([]);
+app.get("/userRanking.json", (req, res) => {
+  fs.readFile(userRankingPath, "utf8", (err, data) => {
+      if (err) {
+          if (err.code === "ENOENT") {
+              // Si le fichier n'existe pas, renvoyer un tableau vide
+              return res.json([]);
+          } else {
+              console.error("Erreur de lecture du fichier :", err);
+              return res.status(500).json({ message: "Erreur interne du serveur." });
+          }
+      }
+      try {
+          const jsonData = JSON.parse(data);
+          res.json(jsonData);
+      } catch (parseErr) {
+          console.error("Erreur de parsing JSON :", parseErr);
+          res.status(500).json({ message: "Erreur de parsing JSON." });
+      }
+  });
+});
+
+
+// Route pour sauvegarder les classements
+app.post("/userRanking.json", (req, res) => {
+  const { userRankings } = req.body;
+
+  // Valider les données
+  if (!Array.isArray(userRankings)) {
+    return res.status(400).json({ message: "Format de données invalide." });
   }
+  // Écrire dans le fichier JSON
+  fs.writeFile(userRankingPath, JSON.stringify(userRankings, null, 2), (err) => {
+      if (err) {
+          console.error("Erreur lors de l'écriture du fichier :", err);
+          return res.status(500).json({ message: "Erreur lors de la sauvegarde des données." });
+      }
+      res.json({ message: "Classements sauvegardés avec succès !" });
+  });
 });
 
-// Endpoint pour sauvegarder les rankings
-app.put('public/data/userRanking', (req, res) => {
-  const filePath = path.join(__dirname, 'public/data/userRanking.json');
-  fs.writeFileSync(filePath, JSON.stringify(req.body, null, 2));
-  res.send({ message: 'Classement sauvegardé !' });
-});
 
-
-
-// Déclare toutes les routes API ici
-//app.use("/api", apiRouter); // Exemple : routes API
 
 // Puis configure les fichiers statiques
 app.use(express.static(path.join(__dirname, "build")));

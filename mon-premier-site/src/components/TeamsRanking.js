@@ -52,81 +52,102 @@ class TeamsRanking extends Component {
     return userId;
   }
 
-   // Charger le classement depuis userRanking.json ou testdb.json
-   async loadRanking() {
+  async loadRanking() {
     const userId = this.getCurrentUserId();
-    let userRankings;
+    let userRankings = [];
 
     try {
-      const response = await fetch("/data/userRanking.json");
-      userRankings = await response.json();
+        const response = await fetch("/userRanking.json");
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP : ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Données chargées :", data);
+
+        // Vérifier si les données sont bien au format attendu
+        if (Array.isArray(data)) {
+            userRankings = data;
+        } else if (data.rankings) {
+            userRankings = data.rankings; // Si l'objet contient un tableau `rankings`
+        } else {
+            console.warn("Format inattendu des données, chargement par défaut.");
+        }
     } catch (error) {
-      console.error("Erreur lors du chargement des rankings :", error);
-      userRankings = [];
+        console.error("Erreur lors du chargement des rankings :", error);
     }
 
     // Trouver le classement de l'utilisateur pour la ligue sélectionnée
     const userRanking = userRankings.find(
-      (ranking) =>
-        ranking.userId === userId &&
-        ranking.rankings[this.state.selectedLeague]
+        (ranking) =>
+            ranking.userId === userId &&
+            ranking.rankings &&
+            ranking.rankings[this.state.selectedLeague]
     );
 
-    if (userRanking) {
-      this.setState({
-        items: userRanking.rankings[this.state.selectedLeague],
-      });
+    if (userRanking && userRanking.rankings[this.state.selectedLeague]) {
+        // Charger le classement de l'utilisateur s'il existe
+        this.setState({
+            items: userRanking.rankings[this.state.selectedLeague],
+        });
     } else {
-      // Charger les données par défaut si aucun classement n'existe
-      const teams = teamsData.leagues[this.state.selectedLeague]?.teams || [];
-      this.setState({
-        items: teams.map((team) => ({
-          id: team.id,
-          name: team.name,
-          logo: team.logo,
-          color: team.color,
-        })),
-      });
+        // Charger les équipes par défaut depuis teamsData si aucun classement n'existe
+        const teams = teamsData.leagues[this.state.selectedLeague]?.teams || [];
+        this.setState({
+            items: teams.map((team) => ({
+                id: team.id,
+                name: team.name,
+                logo: team.logo,
+                color: team.color,
+            })),
+        });
     }
-  }
+}
 
-  // Sauvegarder le classement dans userRanking.json
-  async saveRanking() {
-    const userId = this.getCurrentUserId();
-    let userRankings;
 
-    try {
-      const response = await fetch("/data/userRanking.json");
+
+// Sauvegarder le classement dans userRanking.json
+async saveRanking() {
+  const userId = this.getCurrentUserId(); // Récupérer l'ID de l'utilisateur
+  let userRankings;
+
+  try {
+      const response = await fetch("/userRanking.json");
       userRankings = await response.json();
-    } catch (error) {
+  } catch (error) {
       console.error("Erreur lors du chargement des rankings :", error);
       userRankings = [];
-    }
+  }
 
-    const existingUser = userRankings.find((ranking) => ranking.userId === userId);
+  // Vérifier si l'utilisateur existe déjà
+  let existingUser = userRankings.find((ranking) => ranking.userId === userId);
 
-    if (existingUser) {
+  if (existingUser) {
+      // Mettre à jour uniquement la ligue actuelle
       existingUser.rankings[this.state.selectedLeague] = this.state.items;
-    } else {
-      userRankings.push({
-        userId: userId,
-        rankings: {
-          [this.state.selectedLeague]: this.state.items,
-        },
-      });
-    }
+  } else {
+      // Créer une nouvelle entrée pour l'utilisateur
+      const newRanking = {
+          userId: userId,
+          rankings: {
+              [this.state.selectedLeague]: this.state.items,
+          },
+      };
+      userRankings.push(newRanking);
+  }
 
-    try {
-      await fetch("/data/userRanking.json", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userRankings),
+  // Sauvegarder les données mises à jour
+  try {
+      await fetch("/userRanking.json", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userRankings, null, 2), // Ajout de l'indentation pour faciliter la lecture du JSON
       });
       alert("Classement sauvegardé !");
-    } catch (error) {
+  } catch (error) {
       console.error("Erreur lors de la sauvegarde :", error);
-    }
   }
+}
 
 
   onDragEnd(result) {
